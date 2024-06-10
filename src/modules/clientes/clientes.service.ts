@@ -95,16 +95,21 @@ export class ClientesService {
     createData.domicilio = createData.domicilio?.toLocaleUpperCase().trim();
     createData.email = createData.email?.toLocaleLowerCase().trim();
 
-    // Verificamos si la identificacion ya se encuentra cargada
-    const clienteDB = await this.prisma.clientes.findFirst({
-      where: {
-        OR: [
-          { identificacion: createData.identificacion }
-        ]
-      }
-    });
+    // Verificacmos si la descripcion ya se encuentra cargada
+    const clienteDescripcion = await this.prisma.clientes.findFirst({ where: { descripcion: createData.descripcion } });
+    if (clienteDescripcion) throw new NotFoundException('El cliente ya se encuentra cargado');
 
-    if (clienteDB) throw new NotFoundException('El cliente ya se encuentra cargado');
+    // Verificamos si la identificacion ya se encuentra cargada
+    if (createData.identificacion.trim() !== '') {
+      const clienteDB = await this.prisma.clientes.findFirst({
+        where: {
+          OR: [
+            { identificacion: createData.identificacion }
+          ]
+        }
+      });
+      if (clienteDB) throw new NotFoundException('El nombre de cliente ya se encuentra cargado');
+    }
 
     return await this.prisma.clientes.create({ data: createData, include: { creatorUser: true } });
 
@@ -113,12 +118,11 @@ export class ClientesService {
   // Actualizar cliente
   async update(id: number, updateData: Prisma.ClientesUpdateInput): Promise<Clientes> {
 
-    const { identificacion } = updateData;
+    const { descripcion, identificacion } = updateData;
 
     // Uppercase
     updateData.descripcion = updateData.descripcion?.toString().toLocaleUpperCase().trim();
     updateData.email = updateData.email?.toString().toLocaleLowerCase().trim();
-
 
     const clienteDB = await this.prisma.clientes.findFirst({ where: { id } });
 
@@ -129,6 +133,12 @@ export class ClientesService {
     if (identificacion) {
       const clienteRepetido = await this.prisma.clientes.findFirst({ where: { identificacion: identificacion.toString() } })
       if (clienteRepetido && clienteRepetido.id !== id) throw new NotFoundException('La identificación ya se encuentra cargada');
+    }
+
+    // Verificacion: descripcion repetida
+    if(descripcion){
+      const clienteDescripcion = await this.prisma.clientes.findFirst({ where: { descripcion: updateData.descripcion } });
+      if (clienteDescripcion && clienteDescripcion.id !== id) throw new NotFoundException('El nombre de cliente ya se encuentra cargado');
     }
 
     return await this.prisma.clientes.update({

@@ -34,13 +34,13 @@ model Clientes {
   id                 Int       @id @default(autoincrement())
   descripcion        String
   tipoIdentificacion String?   @default("DNI")
-  identificacion     String    @unique
+  identificacion     String?   @default("")
   telefono           String?   @default("") @db.VarChar(20)
-  domicilio          String    @default("")
-  email              String    @default("")
+  domicilio          String?   @default("")
+  email              String?   @default("")
   activo             Boolean?  @default(true)
-  creatorUserId      Int?
-  creatorUser        Usuarios? @relation(fields: [creatorUserId], references: [id])
+  creatorUserId      Int
+  creatorUser        Usuarios  @relation(fields: [creatorUserId], references: [id])
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 }

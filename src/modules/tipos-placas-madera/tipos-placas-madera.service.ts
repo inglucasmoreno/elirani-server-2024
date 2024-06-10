@@ -76,7 +76,12 @@ export class TiposPlacasMaderaService {
   async insert(createData: Prisma.TiposPlacasMaderaCreateInput): Promise<TiposPlacasMadera> {
 
     // Uppercase
+    createData.codigo = createData.codigo?.toLocaleUpperCase().trim();
     createData.descripcion = createData.descripcion?.toLocaleUpperCase().trim();
+
+    // Verificacion: Codigo repetido
+    let codigoDB = await this.prisma.tiposPlacasMadera.findFirst({ where: { codigo: createData.codigo } });
+    if (codigoDB) throw new NotFoundException('El código ya se encuentra cargado');
 
     // Verificacion: Descripcion repetida
     let tipoDB = await this.prisma.tiposPlacasMadera.findFirst({ where: { descripcion: createData.descripcion } });
@@ -89,15 +94,22 @@ export class TiposPlacasMaderaService {
   // Actualizar tipo
   async update(id: number, updateData: Prisma.TiposPlacasMaderaUpdateInput): Promise<TiposPlacasMadera> {
 
-    const { descripcion } = updateData;
+    const { codigo, descripcion } = updateData;
 
     // Uppercase
+    updateData.codigo = updateData.codigo?.toString().toLocaleUpperCase().trim();
     updateData.descripcion = updateData.descripcion?.toString().toLocaleUpperCase().trim();
 
     const tipoDB = await this.prisma.tiposPlacasMadera.findFirst({ where: { id } });
 
     // Verificacion: El tipo no existe
     if (!tipoDB) throw new NotFoundException('El tipo no existe');
+
+    // Verificacion: Codigo repetido
+    if (codigo) {
+      const codigoRepetido = await this.prisma.tiposPlacasMadera.findFirst({ where: { codigo: codigo.toString() } })
+      if (codigoRepetido && codigoRepetido.id !== id) throw new NotFoundException('El código ya se encuentra cargado');
+    }
 
     // Verificacion: Tipo repetido
     if (descripcion) {

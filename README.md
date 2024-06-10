@@ -5,7 +5,7 @@
 ## Comenzando
 ```bash
 # Instalacion de librerias
-$ yarn install
+$ pnpm install
 ```
 
 ## Variables de entorno
@@ -20,19 +20,19 @@ $ docker compose up -d
 ## Prisma ORM
 - Migracion de inicializacion
 ```bash
-$ yarn prisma:init
+$ yarn prisma:init <Nombre_Migracion>
 ```
 
 ## Ejecucion de proyecto
 ```bash
 # Desarrollo
-$ yarn start
+$ pnpm start
 
 # Modo seguimiento
-$ yarn start:dev
+$ pnpm start:dev
 
 # Modo produccion
-$ yarn start:prod
+$ pnpm start:prod
 ```
 
 ## Desarrollado por
