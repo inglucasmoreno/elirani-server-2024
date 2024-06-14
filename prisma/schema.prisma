@@ -13,36 +13,77 @@ datasource db {
 // Listado de modelos
 
 model Usuarios {
-  id                    Int                     @id @default(autoincrement())
-  usuario               String                  @unique @db.VarChar(30)
-  apellido              String                  @db.VarChar(50)
-  nombre                String                  @db.VarChar(50)
-  dni                   String                  @db.VarChar(30)
-  password              String
-  email                 String                  @db.VarChar(50)
-  role                  String?                 @default("ADMIN_ROLE")
-  activo                Boolean?                @default(true)
-  createdAt             DateTime                @default(now())
-  updatedAt             DateTime                @updatedAt
-  Clientes              Clientes[]
-  TiposMuebles          TiposMuebles[]
-  TiposPlacasMadera     TiposPlacasMadera[]
-  ObrasMaderaMotivoPase ObrasMaderaMotivoPase[]
+  id                         Int                          @id @default(autoincrement())
+  usuario                    String                       @unique @db.VarChar(30)
+  apellido                   String                       @db.VarChar(50)
+  nombre                     String                       @db.VarChar(50)
+  dni                        String                       @db.VarChar(30)
+  password                   String
+  email                      String                       @db.VarChar(50)
+  role                       String?                      @default("ADMIN_ROLE")
+  activo                     Boolean?                     @default(true)
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @updatedAt
+  Clientes                   Clientes[]
+  TiposMuebles               TiposMuebles[]
+  TiposPlacasMadera          TiposPlacasMadera[]
+  ObrasMaderaMotivoPase      ObrasMaderaMotivoPase[]
+  ObrasMadera                ObrasMadera[]
+  OrdenesMantenimientoMadera OrdenesMantenimientoMadera[]
+  ObrasMaderaPases           ObrasMaderaPases[]
+  Muebles                    Muebles[]
+  MueblesPlacas              MueblesPlacas[]
 }
 
 model Clientes {
-  id                 Int       @id @default(autoincrement())
+  id                 Int           @id @default(autoincrement())
   descripcion        String
-  tipoIdentificacion String?   @default("DNI")
-  identificacion     String?   @default("")
-  telefono           String?   @default("") @db.VarChar(20)
-  domicilio          String?   @default("")
-  email              String?   @default("")
-  activo             Boolean?  @default(true)
+  tipoIdentificacion String?       @default("DNI")
+  identificacion     String?       @default("")
+  telefono           String?       @default("") @db.VarChar(20)
+  domicilio          String?       @default("")
+  email              String?       @default("")
+  activo             Boolean?      @default(true)
   creatorUserId      Int
-  creatorUser        Usuarios  @relation(fields: [creatorUserId], references: [id])
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  creatorUser        Usuarios      @relation(fields: [creatorUserId], references: [id])
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  ObrasMadera        ObrasMadera[]
+}
+
+model ObrasMadera {
+  id                         Int                          @id @default(autoincrement())
+  clienteId                  Int
+  codigo                     String?                      @default("")
+  fechaInicio                DateTime                     @default(now())
+  fechaFinalizacion          DateTime                     @default(now())
+  fechaFinalizacionEstimada  DateTime                     @default(now())
+  descripcion                String
+  domilicio                  String
+  estado                     String                       @default("Pendiente")
+  precio                     Float?                       @default(0)
+  activo                     Boolean?                     @default(true)
+  creatorUserId              Int
+  cliente                    Clientes                     @relation(fields: [clienteId], references: [id])
+  creatorUser                Usuarios                     @relation(fields: [creatorUserId], references: [id])
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @updatedAt
+  ObrasMaderaPases           ObrasMaderaPases[]
+  OrdenesMantenimientoMadera OrdenesMantenimientoMadera[]
+  Muebles                    Muebles[]
+}
+
+model OrdenesMantenimientoMadera {
+  id            Int         @id @default(autoincrement())
+  obraMaderaId  Int
+  fecha         DateTime    @default(now())
+  observaciones String?     @default("")
+  activo        Boolean?    @default(true)
+  creatorUserId Int
+  obraMadera    ObrasMadera @relation(fields: [obraMaderaId], references: [id])
+  creatorUser   Usuarios    @relation(fields: [creatorUserId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model TiposMuebles {
@@ -54,25 +95,75 @@ model TiposMuebles {
   creatorUser   Usuarios? @relation(fields: [creatorUserId], references: [id])
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  Muebles       Muebles[]
+}
+
+model Muebles {
+  id            Int             @id @default(autoincrement())
+  obraMaderaId  Int?
+  tipoMuebleId  Int?
+  observaciones String?         @default("")
+  precio        Float?          @default(0)
+  estado        String          @default("Pendiente")
+  activo        Boolean?        @default(true)
+  creatorUserId Int?
+  obraMadera    ObrasMadera?    @relation(fields: [obraMaderaId], references: [id])
+  tipoMueble    TiposMuebles?   @relation(fields: [tipoMuebleId], references: [id])
+  creatorUser   Usuarios?       @relation(fields: [creatorUserId], references: [id])
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  MueblesPlacas MueblesPlacas[]
+}
+
+model ObrasMaderaPases {
+  id                     Int                    @id @default(autoincrement())
+  obraMaderaId           Int?
+  direccion              String
+  observaciones          String                 @default("")
+  etapaAnterior          String                 @default("")
+  etapaActual            String                 @default("")
+  obraMaderaMotivoPaseId Int?
+  activo                 Boolean?               @default(true)
+  creatorUserId          Int?
+  obraMaderaMotivoPase   ObrasMaderaMotivoPase? @relation(fields: [obraMaderaMotivoPaseId], references: [id])
+  creatorUser            Usuarios?              @relation(fields: [creatorUserId], references: [id])
+  obraMadera             ObrasMadera?           @relation(fields: [obraMaderaId], references: [id])
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
 }
 
 model TiposPlacasMadera {
-  id            Int       @id @default(autoincrement())
+  id            Int             @id @default(autoincrement())
   codigo        String
   descripcion   String
-  activo        Boolean?  @default(true)
+  activo        Boolean?        @default(true)
   creatorUserId Int?
-  creatorUser   Usuarios? @relation(fields: [creatorUserId], references: [id])
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  creatorUser   Usuarios?       @relation(fields: [creatorUserId], references: [id])
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  MueblesPlacas MueblesPlacas[]
+}
+
+model MueblesPlacas {
+  id                Int                @id @default(autoincrement())
+  idMueble          Int?
+  idTipoPlacaMadera Int?
+  activo            Boolean?           @default(true)
+  creatorUserId     Int?
+  mueble            Muebles?           @relation(fields: [idMueble], references: [id])
+  tipoPlacaMadera   TiposPlacasMadera? @relation(fields: [idTipoPlacaMadera], references: [id])
+  creatorUser       Usuarios?          @relation(fields: [creatorUserId], references: [id])
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 }
 
 model ObrasMaderaMotivoPase {
-  id            Int       @id @default(autoincrement())
-  descripcion   String
-  activo        Boolean?  @default(true)
-  creatorUserId Int?
-  creatorUser   Usuarios? @relation(fields: [creatorUserId], references: [id])
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id               Int                @id @default(autoincrement())
+  descripcion      String
+  activo           Boolean?           @default(true)
+  creatorUserId    Int?
+  creatorUser      Usuarios?          @relation(fields: [creatorUserId], references: [id])
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  ObrasMaderaPases ObrasMaderaPases[]
 }
