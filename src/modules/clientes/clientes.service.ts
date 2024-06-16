@@ -53,7 +53,7 @@ export class ClientesService {
     let where: any = {};
 
     if (activo.trim() !== '') {
-      where = { ...where, activo: activo === 'true' ? true : false }
+      where = { ...where, activo: activo === 'true' }
     }
 
     if (parametro.trim() !== '') {

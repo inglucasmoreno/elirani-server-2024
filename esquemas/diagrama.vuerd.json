@@ -3,8 +3,8 @@
     "version": "2.2.11",
     "width": 2000,
     "height": 2000,
-    "scrollTop": -483,
-    "scrollLeft": -660,
+    "scrollTop": -423,
+    "scrollLeft": 0,
     "zoomLevel": 1,
     "show": {
       "tableComment": true,
@@ -330,7 +330,7 @@
           "active": false,
           "left": 66.5,
           "top": 106,
-          "zIndex": 199,
+          "zIndex": 1,
           "widthName": 60,
           "widthComment": 60,
           "color": "#00FF00"
@@ -531,7 +531,7 @@
           "active": false,
           "left": 650,
           "top": 137.5,
-          "zIndex": 519,
+          "zIndex": 2,
           "widthName": 82.44384765625,
           "widthComment": 60,
           "color": "#44F5EE"
@@ -709,7 +709,7 @@
           "active": false,
           "left": 1118.7144,
           "top": 988.4285,
-          "zIndex": 620,
+          "zIndex": 4,
           "widthName": 149.39892578125,
           "widthComment": 60,
           "color": "#00ECFF"
@@ -910,7 +910,7 @@
           "active": false,
           "left": 1085.5,
           "top": 142.5,
-          "zIndex": 520,
+          "zIndex": 3,
           "widthName": 116.40380859375,
           "widthComment": 60,
           "color": "#00FFF6"
@@ -1249,7 +1249,7 @@
           "active": false,
           "left": 34,
           "top": 519,
-          "zIndex": 665,
+          "zIndex": 7,
           "widthName": 81.47900390625,
           "widthComment": 60,
           "color": "#00FFFF"
@@ -1496,7 +1496,7 @@
           "active": false,
           "left": 578,
           "top": 612,
-          "zIndex": 658,
+          "zIndex": 5,
           "widthName": 60,
           "widthComment": 60,
           "color": "#00F6FF"
@@ -1697,7 +1697,7 @@
           "active": false,
           "left": 1170.5,
           "top": 632.5,
-          "zIndex": 662,
+          "zIndex": 6,
           "widthName": 90.15625,
           "widthComment": 60,
           "color": "#00FFF6"
@@ -1757,7 +1757,7 @@
           },
           {
             "id": "0cee4abd-b514-4568-8809-252a8dd8913c",
-            "name": "idMotivoPase",
+            "name": "idObraMaderaMotivoPase",
             "comment": "",
             "dataType": "int",
             "default": "",
@@ -1772,7 +1772,7 @@
               "pk": false,
               "fk": true,
               "pfk": false,
-              "widthName": 80.0380859375,
+              "widthName": 153.01708984375,
               "widthComment": 60,
               "widthDataType": 60,
               "widthDefault": 60
@@ -1967,7 +1967,7 @@
           "active": false,
           "left": 571.9998,
           "top": 947.8572,
-          "zIndex": 655,
+          "zIndex": 9,
           "widthName": 117.60986328125,
           "widthComment": 60,
           "color": "#00ECFF"
@@ -2191,7 +2191,7 @@
           "active": false,
           "left": 69.7105,
           "top": 986.6264,
-          "zIndex": 653,
+          "zIndex": 8,
           "widthName": 181.20703125,
           "widthComment": 60,
           "color": "#00ECFF"
@@ -2243,7 +2243,7 @@
             "529f4382-0eb9-456c-948f-27ef3b3b5927"
           ],
           "x": 478.18603515625,
-          "y": 608,
+          "y": 697,
           "direction": "right"
         },
         "end": {
@@ -2346,18 +2346,18 @@
           "columnIds": [
             "529f4382-0eb9-456c-948f-27ef3b3b5927"
           ],
-          "x": 478.18603515625,
-          "y": 786,
-          "direction": "right"
+          "x": 367.1395263671875,
+          "y": 875,
+          "direction": "bottom"
         },
         "end": {
           "tableId": "4a48e620-cbd4-422d-8a8d-4c21d3a28efe",
           "columnIds": [
             "19c18e84-de37-4c0f-b49a-30e897d4fcf7"
           ],
-          "x": 758.41337421875,
-          "y": 947.8572,
-          "direction": "top"
+          "x": 571.9998,
+          "y": 1095.1072,
+          "direction": "left"
         },
         "constraintName": "fk_obrasmadera_to_obrasmaderapases",
         "visible": true
@@ -2381,7 +2381,7 @@
           "columnIds": [
             "0cee4abd-b514-4568-8809-252a8dd8913c"
           ],
-          "x": 944.8269484375,
+          "x": 1012.01688984375,
           "y": 1095.1072,
           "direction": "right"
         },
@@ -2398,7 +2398,7 @@
           "columnIds": [
             "529f4382-0eb9-456c-948f-27ef3b3b5927"
           ],
-          "x": 256.093017578125,
+          "x": 145.0465087890625,
           "y": 875,
           "direction": "bottom"
         },

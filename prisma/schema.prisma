@@ -59,7 +59,7 @@ model ObrasMadera {
   fechaFinalizacion          DateTime                     @default(now())
   fechaFinalizacionEstimada  DateTime                     @default(now())
   descripcion                String
-  domilicio                  String
+  domicilio                  String?                      @default("")
   estado                     String                       @default("Pendiente")
   precio                     Float?                       @default(0)
   activo                     Boolean?                     @default(true)
