@@ -28,14 +28,11 @@ export class ObrasMaderaService {
     columna = 'id',
     direccion = 'desc',
     activo = '',
+    estado = '',
     parametro = '',
     pagina = 1,
     itemsPorPagina = 10000
   }: any): Promise<any> {
-
-    // Ordenando datos
-    let orderBy = {};
-    orderBy[columna] = direccion;
 
     let where = {};
 
@@ -46,11 +43,40 @@ export class ObrasMaderaService {
       };
     }
 
-    // where.OR.push({
-    //   descripcion: {
-    //     contains: parametro.toUpperCase()
-    //   }
-    // })
+    // Filtro por estado
+    if (estado !== '') {
+      where = {
+        ...where,
+        estado: estado
+      }
+    }
+
+    // Filtro por parametro
+    if (parametro !== '') {
+      where = {
+        ...where,
+        OR: [
+          // { id: Number(parametro) ? Number(parametro) : -1 },
+          { codigo: { contains: parametro } },
+          { cliente: { descripcion: { contains: parametro } } },
+          { estado: { contains: parametro } },
+        ]
+      }
+    }
+
+    // Ordenando datos
+    let orderBy = {};
+    orderBy[columna] = direccion;
+
+    // Si el campo es compuesto, por ejemplo 'autor.nombre'
+    if (columna.includes('.')) {
+      const [relation, relatedField] = columna.split('.');
+      orderBy = {
+        [relation]: {
+          [relatedField]: direccion,
+        },
+      };
+    }
 
     // Total de obras
     const totalItems = await this.prisma.obrasMadera.count({ where });
@@ -62,7 +88,7 @@ export class ObrasMaderaService {
         cliente: true,
         creatorUser: true,
       },
-      // skip: (pagina - 1) * itemsPorPagina,
+      skip: (pagina - 1) * itemsPorPagina,
       orderBy,
       where
     })
@@ -79,20 +105,19 @@ export class ObrasMaderaService {
 
     // Uppercase
     createData.codigo = createData.codigo?.toString().toLocaleUpperCase().trim();
-    createData.descripcion = createData.descripcion?.toString().toLocaleUpperCase().trim();
-    createData.domicilio = createData.domicilio?.toString().toLocaleUpperCase().trim();
-    
-    // Adaptacion de fechas
-    // createData.fechaInicio = new Date(createData.fechaInicio);
+    createData.observaciones = createData.observaciones?.toString().toLocaleUpperCase().trim();
+    createData.direccion = createData.direccion?.toString().toLocaleUpperCase().trim();
 
     // Verificacion: Codigo repetido
     let obraDB = await this.prisma.obrasMadera.findFirst({ where: { codigo: createData.codigo } });
     if (obraDB) throw new NotFoundException('El código ya se encuentra cargado');
 
-    return await this.prisma.obrasMadera.create({ data: createData, include: { 
-      cliente: true,
-      creatorUser: true 
-    } });
+    return await this.prisma.obrasMadera.create({
+      data: createData, include: {
+        cliente: true,
+        creatorUser: true
+      }
+    });
 
   }
 
@@ -103,8 +128,8 @@ export class ObrasMaderaService {
 
     // Uppercase
     updateData.codigo = updateData.codigo?.toString().toLocaleUpperCase().trim();
-    updateData.descripcion = updateData.descripcion?.toString().toLocaleUpperCase().trim();
-    updateData.domicilio = updateData.domicilio?.toString().toLocaleUpperCase().trim();
+    updateData.observaciones = updateData.observaciones?.toString().toLocaleUpperCase().trim();
+    updateData.direccion = updateData.direccion?.toString().toLocaleUpperCase().trim();
 
     // Verificacion: La obra no existe
     const obraDB = await this.prisma.obrasMadera.findFirst({ where: { id } });

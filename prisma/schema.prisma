@@ -54,20 +54,20 @@ model Clientes {
 model ObrasMadera {
   id                         Int                          @id @default(autoincrement())
   clienteId                  Int
+  creatorUserId              Int
   codigo                     String?                      @default("")
-  fechaInicio                DateTime                     @default(now())
-  fechaFinalizacion          DateTime                     @default(now())
-  fechaFinalizacionEstimada  DateTime                     @default(now())
-  descripcion                String
-  domicilio                  String?                      @default("")
-  estado                     String                       @default("Pendiente")
+  fechaInicio                DateTime?                    @default(now())
+  fechaColocacion            DateTime?                    @default(now())
+  fechaColocacionEstimada    DateTime?                    @default(now())
+  observaciones              String?                      @default("")
+  direccion                  String?                      @default("")
+  estado                     String?                      @default("Pendiente")
   precio                     Float?                       @default(0)
   activo                     Boolean?                     @default(true)
-  creatorUserId              Int
-  cliente                    Clientes                     @relation(fields: [clienteId], references: [id])
-  creatorUser                Usuarios                     @relation(fields: [creatorUserId], references: [id])
   createdAt                  DateTime                     @default(now())
   updatedAt                  DateTime                     @updatedAt
+  cliente                    Clientes                     @relation(fields: [clienteId], references: [id])
+  creatorUser                Usuarios                     @relation(fields: [creatorUserId], references: [id])
   ObrasMaderaPases           ObrasMaderaPases[]
   OrdenesMantenimientoMadera OrdenesMantenimientoMadera[]
   Muebles                    Muebles[]
